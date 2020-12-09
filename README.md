@@ -8,3 +8,5 @@ I've implemented fraction template, 2D matrix template, added constants and usef
 It's still under development, so new functionalities and improvements wil come soon.
 
 I hope you'll enjoy.
+
+You can contact me at totosayen@gmail.com
