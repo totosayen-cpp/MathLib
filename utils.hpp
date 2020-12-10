@@ -33,24 +33,23 @@ namespace math {
 		}
 	}
 
-	bool is_number(std::string const& number) {
-		
-	}
-}
-
-template<typename T>
-std::string display_vector(std::vector<T> const& vector, std::string const& separator = " ") {
-	if (vector.size() == 0) {
-		return "";
-	}
-	std::vector<T> copy = vector;
-	math::reduce_number(copy);
-	std::ostringstream result;
-	for (std::size_t i = 0; i < copy.size(); i++) {
-		result << copy[i];
-		if (i != copy.size() - 1) {
-			result << separator;
+	inline bool is_number(std::string const& number) {
+		const std::string chars = "0123456789.";
+		for (char c : number) {
+			if (std::find(chars.begin(), chars.end(), c) == chars.end()) {
+				return false;
+			}
 		}
+		// find errors like 8..3 or 6.5.2
+		bool has_comma = false;
+		for (std::size_t i = 0; i < number.size(); i++) {
+			if (number[i] == '.') {
+				if (has_comma) {
+					return false;
+				}
+				has_comma = true;
+			}
+		}
+		return true;
 	}
-	return result.str();
 }

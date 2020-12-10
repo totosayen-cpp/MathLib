@@ -26,3 +26,15 @@ inline void error(std::string const& func_name, std::string const& error_msg) {
 	std::system("pause");
 	std::exit(1);
 }
+
+template<typename T>
+inline std::ostream& operator<<(std::ostream& stream, std::vector<T> const& vector) {
+	stream << '[';
+	for (std::size_t i = 0; i < vector.size(); i++) {
+		stream << vector[i];
+		if (i != vector.size() - 1) {
+			stream << ", ";
+		}
+	}
+	return stream << "]";
+}

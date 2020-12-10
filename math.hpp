@@ -4,3 +4,4 @@
 #include "constants.hpp"
 #include "frac.hpp"
 #include "matrix.hpp"
+#include "prime.hpp"

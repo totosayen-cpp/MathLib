@@ -2,6 +2,7 @@
 
 #include "include.hpp"
 #include "utils.hpp"
+#include "prime.hpp"
 
 enum class frac_mode { FRAC, NUMBER };
 
@@ -13,6 +14,21 @@ namespace math {
 		NUMBER denominator_ = 1.;
 		mutable frac_mode output_ = frac_mode::FRAC;
 
+		void reduce() {
+			std::vector<long long int> factors_numerator = math::prime_factors(numerator_);
+			std::vector<long long int> factors_denominator = math::prime_factors(denominator_);
+			for (std::size_t i = 0; i < factors_numerator.size(); i++) {
+				for (std::size_t j = 0; j < factors_denominator.size(); j++) {
+					if (factors_numerator[i] == factors_denominator[j]) {
+						factors_numerator.erase(factors_numerator.begin() + i);
+						factors_denominator.erase(factors_denominator.begin() + j);
+					}
+				}
+			}
+			numerator_ = std::accumulate(factors_numerator.begin(), factors_numerator.end(), 1, std::multiplies<long long int>());
+			denominator_ = std::accumulate(factors_denominator.begin(), factors_denominator.end(), 1, std::multiplies<long long int>());
+		}
+
 	public:
 
 		Frac(NUMBER numerator, NUMBER denominator) {
@@ -21,6 +37,7 @@ namespace math {
 				error("math::Frac::Frac", "denominator cannot be 0 !");
 			}
 			denominator_ = denominator;
+			reduce();
 		}
 
 		Frac(NUMBER result) {
@@ -50,6 +67,7 @@ namespace math {
 				error("math::Frac::denominator", "denominator cannot be 0 !");
 			}
 			denominator_ = new_denominator;
+			reduce();
 		}
 
 		inline frac_mode output_mode() const {
@@ -71,6 +89,7 @@ namespace math {
 
 		inline void operator++() {		// ++Frac
 			numerator_ += denominator_;
+			reduce();
 		}
 
 		inline void operator++(int) { // Frac++
@@ -88,6 +107,7 @@ namespace math {
 
 		inline void operator--() {		// ++Frac
 			numerator_ -= denominator_;
+			reduce();
 		}
 
 		inline void operator--(int) { // Frac++
