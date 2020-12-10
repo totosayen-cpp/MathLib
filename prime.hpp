@@ -54,7 +54,7 @@ namespace math {
 			factors.push_back(2ll);
 			number /= 2;
 		}
-		const std::size_t limit = std::sqrt(number) + 1;
+		const std::size_t limit = static_cast<std::size_t>(std::sqrt(number) + 1);
 		for (std::size_t i = 3; i < limit; i += 2) {
 			while (number % i == 0) {
 				factors.push_back(i);

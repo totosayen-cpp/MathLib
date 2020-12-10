@@ -10,13 +10,13 @@ namespace math {
 
 	template<typename NUMBER>
 	class Frac {
-		NUMBER numerator_ = 1.;
-		NUMBER denominator_ = 1.;
+		NUMBER numerator_ = static_cast<NUMBER>(1);
+		NUMBER denominator_ = static_cast<NUMBER>(1);
 		mutable frac_mode output_ = frac_mode::FRAC;
 
 		void reduce() {
-			std::vector<long long int> factors_numerator = math::prime_factors(numerator_);
-			std::vector<long long int> factors_denominator = math::prime_factors(denominator_);
+			std::vector<long long int> factors_numerator = math::prime_factors(static_cast<long long int>(numerator_));
+			std::vector<long long int> factors_denominator = math::prime_factors(static_cast<long long int>(denominator_));
 			for (std::size_t i = 0; i < factors_numerator.size(); i++) {
 				for (std::size_t j = 0; j < factors_denominator.size(); j++) {
 					if (factors_numerator[i] == factors_denominator[j]) {
@@ -25,8 +25,8 @@ namespace math {
 					}
 				}
 			}
-			numerator_ = std::accumulate(factors_numerator.begin(), factors_numerator.end(), 1, std::multiplies<long long int>());
-			denominator_ = std::accumulate(factors_denominator.begin(), factors_denominator.end(), 1, std::multiplies<long long int>());
+			numerator_ = static_cast<NUMBER>(std::accumulate(factors_numerator.begin(), factors_numerator.end(), 1, std::multiplies<long long int>()));
+			denominator_ = static_cast<NUMBER>(std::accumulate(factors_denominator.begin(), factors_denominator.end(), 1, std::multiplies<long long int>()));
 		}
 
 	public:
@@ -146,7 +146,7 @@ inline math::IFrac operator"" _ifrac(const char* expr, std::size_t length) {
 	try {
 		return math::IFrac(std::stoi(std::string(expr).substr(0, pos)), std::stoi(std::string(expr).substr(pos + 1)));
 	}
-	catch (std::invalid_argument& cast_error) {
+	catch (std::invalid_argument&) {
 		error("operator\"\" _ifrac", "invalid frac expression : " + std::string(expr));
 	}
 }
@@ -157,7 +157,7 @@ inline math::FFrac operator"" _ffrac(const char* expr, std::size_t length) {
 	try {
 		return math::FFrac(std::stof(std::string(expr).substr(0, pos)), std::stof(std::string(expr).substr(pos + 1)));
 	}
-	catch (std::invalid_argument& cast_error) {
+	catch (std::invalid_argument&) {
 		error("operator\"\" _ffrac", "invalid frac expression : " + std::string(expr));
 	}
 }
@@ -168,7 +168,7 @@ inline math::LIFrac operator"" _lifrac(const char* expr, std::size_t length) {
 	try {
 		return math::LIFrac(std::stol(std::string(expr).substr(0, pos)), std::stol(std::string(expr).substr(pos + 1)));
 	}
-	catch (std::invalid_argument& cast_error) {
+	catch (std::invalid_argument&) {
 		error("operator\"\" _lifrac", "invalid frac expression : " + std::string(expr));
 	}
 }
@@ -179,21 +179,21 @@ inline math::LFFrac operator"" _lffrac(const char* expr, std::size_t length) {
 	try {
 		return math::LFFrac(std::stold(std::string(expr).substr(0, pos)), std::stold(std::string(expr).substr(pos + 1)));
 	}
-	catch (std::invalid_argument& cast_error) {
+	catch (std::invalid_argument&) {
 		error("operator\"\" _lffrac", "invalid frac expression : " + std::string(expr));
 	}
 }
 
 inline math::IFrac operator"" _ifrac(long double result) {
-	return math::IFrac(result);
+	return math::IFrac(static_cast<int>(result));
 }
 
 inline math::FFrac operator"" _ffrac(long double result) {
-	return math::FFrac(result);
+	return math::FFrac(static_cast<float>(result));
 }
 
 inline math::LIFrac operator"" _lifrac(long double result) {
-	return math::LIFrac(result);
+	return math::LIFrac(static_cast<long long int>(result));
 }
 
 inline math::LFFrac operator"" _lffrac(long double result) {
