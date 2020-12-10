@@ -34,7 +34,7 @@ namespace math {
 	}
 
 	bool is_number(std::string const& number) {
-		// remplir
+		
 	}
 }
 
