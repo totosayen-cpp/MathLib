@@ -32,6 +32,10 @@ namespace math {
 			numbers[i] = static_cast<NUMBER>(std::stold(math::reduce_number<NUMBER>(numbers[i])));
 		}
 	}
+
+	bool is_number(std::string const& number) {
+		// remplir
+	}
 }
 
 template<typename T>

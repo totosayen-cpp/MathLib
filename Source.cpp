@@ -3,10 +3,8 @@
 #include "math.hpp"
 
 int main() {
-	math::FFrac f = "1/4"_ffrac;
-	++f;
-	std::cout << f << std::endl;
-	f.output_mode(NUMBER);
+	math::FFrac f = math::FFrac(10);
+	std::cin >> f;
 	std::cout << f << std::endl;
 
 	math::IMatrix2D matrix = math::IMatrix2D();

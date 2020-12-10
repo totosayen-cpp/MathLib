@@ -60,12 +60,13 @@ namespace math {
 			output_ = mode;
 		}
 
-		inline Frac operator+(Frac const& frac) const {
-			return Frac(numerator_ * frac.denominator() + frac.numerator() * numerator_, denominator_ * frac.denominator());
+		template<typename T>
+		inline Frac<NUMBER> operator+(Frac<T> const& frac) const {
+			return Frac<NUMBER>(numerator_ * frac.denominator() + frac.numerator() * denominator_, denominator_ * frac.denominator());
 		}
 
-		inline Frac operator+(NUMBER n) const {
-			return Frac(numerator_ + n * denominator_, denominator_);
+		inline Frac<NUMBER> operator+(NUMBER n) const {
+			return Frac<NUMBER>(numerator_ + n * denominator_, denominator_);
 		}
 
 		inline void operator++() {		// ++Frac
@@ -74,6 +75,41 @@ namespace math {
 
 		inline void operator++(int) { // Frac++
 			++(*this);
+		}
+
+		template<typename T>
+		inline Frac<NUMBER> operator-(Frac<T> const& frac) const {
+			return Frac<NUMBER>(numerator_ * frac.denominator() - frac.numerator() * denominator_, denominator_ * frac.denominator());
+		}
+
+		inline Frac<NUMBER> operator-(NUMBER n) const {
+			return Frac<NUMBER>(numerator_ - n * denominator_, denominator_);
+		}
+
+		inline void operator--() {		// ++Frac
+			numerator_ -= denominator_;
+		}
+
+		inline void operator--(int) { // Frac++
+			--(*this);
+		}
+
+		template<typename T>
+		inline Frac<NUMBER> operator*(Frac<T> const& frac) {
+			return Frac<NUMBER>(numerator_ * frac.numerator(), denominator_ * frac.denominator());
+		}
+
+		inline Frac<NUMBER> operator*(NUMBER number) {
+			return Frac<NUMBER>(numerator_ * number, denominator_);
+		}
+
+		template<typename T>
+		inline Frac<NUMBER> operator/(Frac<T> const& frac) {
+			return Frac<NUMBER>(numerator_ * frac.denominator(), denominator_ * frac.numerator());
+		}
+
+		inline Frac<NUMBER> operator/(NUMBER number) {
+			return Frac<NUMBER>(numerator_, denominator_ * number);
 		}
 
 	};
@@ -102,7 +138,7 @@ inline math::FFrac operator"" _ffrac(const char* expr, std::size_t length) {
 		return math::FFrac(std::stof(std::string(expr).substr(0, pos)), std::stof(std::string(expr).substr(pos + 1)));
 	}
 	catch (std::invalid_argument& cast_error) {
-		error("operator\"\" _ifrac", "invalid frac expression : " + std::string(expr));
+		error("operator\"\" _ffrac", "invalid frac expression : " + std::string(expr));
 	}
 }
 
@@ -113,7 +149,7 @@ inline math::LIFrac operator"" _lifrac(const char* expr, std::size_t length) {
 		return math::LIFrac(std::stol(std::string(expr).substr(0, pos)), std::stol(std::string(expr).substr(pos + 1)));
 	}
 	catch (std::invalid_argument& cast_error) {
-		error("operator\"\" _ifrac", "invalid frac expression : " + std::string(expr));
+		error("operator\"\" _lifrac", "invalid frac expression : " + std::string(expr));
 	}
 }
 
@@ -124,7 +160,7 @@ inline math::LFFrac operator"" _lffrac(const char* expr, std::size_t length) {
 		return math::LFFrac(std::stold(std::string(expr).substr(0, pos)), std::stold(std::string(expr).substr(pos + 1)));
 	}
 	catch (std::invalid_argument& cast_error) {
-		error("operator\"\" _ifrac", "invalid frac expression : " + std::string(expr));
+		error("operator\"\" _lffrac", "invalid frac expression : " + std::string(expr));
 	}
 }
 
@@ -156,6 +192,26 @@ inline std::ostream& operator<<(std::ostream& stream, math::Frac<NUMBER> const& 
 		return stream << std::endl << frac.denominator();
 	}
 	return stream << (frac.numerator() / frac.denominator());
+}
+
+template<typename NUMBER>
+inline std::istream& operator>>(std::istream& stream, math::Frac<NUMBER>& frac) {
+	std::string expr;
+	std::cin >> expr;
+	const std::size_t pos = std::string(expr).find('/');
+	if (std::find(expr.begin(), expr.end(), '/') == expr.end()) {
+		frac = math::Frac<NUMBER>(std::stold(expr));
+		return stream;
+	}
+	else {
+		try {
+			frac = math::Frac<NUMBER>(std::stold(std::string(expr).substr(0, pos)), std::stold(std::string(expr).substr(pos + 1)));
+			return stream;
+		}
+		catch (std::invalid_argument& cast_error) {
+			error("operator>> math::Frac", "invalid frac expression : " + std::string(expr));
+		}
+	}
 }
 
 #ifndef DISABLE_FRAC_TYPES
