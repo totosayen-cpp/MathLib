@@ -16,5 +16,3 @@ int main() {
 	std::system("pause");
 	return 0;
 }
-
-// À faire : écrire une DOC !
