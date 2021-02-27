@@ -10,3 +10,5 @@ It's still under development, so new functionalities and improvements wil come s
 I hope you'll enjoy.
 
 You can contact me at totosayen@gmail.com
+
+(I'll try to improve the syntax soon, especially with Matrix)
